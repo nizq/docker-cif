@@ -35,3 +35,5 @@ RUN echo "===> Building..." \
 
 ENV CIF_HOME=/opt/cif PATH=$CIF_HOME/bin:$PATH PERL5LIB=/opt/cif/lib/perl5 DATA_DIR=/var/cif LOG_DIR=/var/log/cif CONF_DIR=/etc/cif
 VOLUME ["/etc/cif", "/var/cif", "/var/log/cif"]
+ADD entrypoint.sh /
+CMD ["/entrypoint.sh"]
