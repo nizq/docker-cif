@@ -4,7 +4,7 @@ MAINTAINER nizq <ni.zhiqiang@gmail.com>
 
 RUN echo "===> Building..." \
     && apk add --update libffi libzmq perl perl openssl expat gettext libxml2 \
-           make libffi-dev gcc libc-dev perl-dev jq \
+           make libffi-dev gcc libc-dev perl-dev jq wget \
            curl openssl-dev autoconf automake libtool \
            expat-dev libxml2-dev git bind supervisor \
     && curl -L https://cpanmin.us | perl - App::cpanminus \
@@ -21,7 +21,7 @@ RUN echo "===> Building..." \
     && cd /root \
     && git clone https://github.com/csirtgadgets/massive-octo-spice.git mos \
     && cd mos/contrib \
-    && curl -O http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz \
+    && wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz \
     && gunzip GeoLite2-City.mmdb.gz \
     && cd /root/mos \
     && ./autogen.sh \
