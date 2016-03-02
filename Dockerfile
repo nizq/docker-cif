@@ -3,10 +3,11 @@ FROM alpine:3.3
 MAINTAINER nizq <ni.zhiqiang@gmail.com>
 
 RUN echo "===> Building..." \
+    && sed -i "s/dl-4\.alpinelinux\.org/repos\.lax-noc\.com/g" /etc/apk/repositories \
     && apk add --update libffi libzmq perl perl openssl expat gettext libxml2 \
            make libffi-dev gcc libc-dev perl-dev jq wget \
            curl openssl-dev autoconf automake libtool \
-           expat-dev libxml2-dev git bind supervisor \
+           expat-dev libxml2-dev git unbound supervisor \
     && curl -L https://cpanmin.us | perl - App::cpanminus \
     && cpanm --notest Regexp::Common Moo@1.007000 Mouse@2.4.1 ZMQ::FFI@0.17 \
         Log::Log4perl@1.44 Test::Exception@0.32 MaxMind::DB::Reader@0.050005 \
@@ -30,10 +31,10 @@ RUN echo "===> Building..." \
     && mkdir -p /var/cif/cache \
     && make && make install \
     && apk del openssl-dev libc-dev perl-dev expat-dev libxml2-dev autoconf automake libtool git \
-    && cp /root/mos/elasticsearch/*.json /root \
+    && cp /root/mos/elasticsearch/*.json / \
     && rm -rf /var/cache/apk/* /root/mos
 
 ENV CIF_HOME=/opt/cif PATH=$CIF_HOME/bin:$PATH PERL5LIB=/opt/cif/lib/perl5 DATA_DIR=/var/cif LOG_DIR=/var/log/cif CONF_DIR=/etc/cif
 VOLUME ["/etc/cif", "/var/cif", "/var/log/cif"]
-ADD entrypoint.sh /
+COPY ["entrypoint.sh", "unbound.conf", "supervisord.conf", "/" ]
 CMD ["/entrypoint.sh"]

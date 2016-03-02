@@ -30,4 +30,25 @@ done
 
 rm -f $new_mark
 
-supervisord -c /etc/cif/supervisord.conf
+unbound -c /unbound.conf
+
+cat <<EOF >/supervisord.conf
+[program:router]
+command=/opt/cif/bin/cif-router --storage-host=${es_host}:9200 --logging --logfile=/var/log/cif/router.log
+
+[program:worker]
+command=/opt/cif/bin/cif-worker -C /etc/cif/bin/cif-worker.yml --logging --logfile=/var/log/cif/worker.log
+
+[program:smrt]
+command=/opt/cif/bin/cif-smrt -C /etc/cif/bin/cif-smrt.yml --logging --logfile=/var/log/cif/smrt.log
+
+[supervisord]
+logfile = /var/log/cif/supervisord.log
+logfile_maxbytes = 50MB
+logfile_backups=7
+loglevel = info
+pidfile = /var/run/supervisord.pid
+nodaemon = true
+EOF
+
+supervisord -c /supervisord.conf
