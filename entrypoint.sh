@@ -3,6 +3,13 @@
 es_host=${ES:-localhost}
 new_mark=/var/cif/.new_install
 
+cd /var/cif
+for path in "log" "conf" "data"; do
+    if [ ! -d "$path" ]; then
+        (rm -f $path; mkdir $path)
+    fi
+done
+
 url="http://${es_host}:9200/_template/cif_observables/"
 num=$(curl -XGET ${url} 2>/dev/null|jq '.cif_observables|length')
 if [ "$num" -eq 0 ]; then
@@ -19,7 +26,7 @@ if [ "$num" -eq 0 ]; then
 fi
 
 for service in "worker" "smrt"; do
-    conf=/var/cif/cif-${service}.yml
+    conf=/var/cif/conf/cif-${service}.yml
     if [ ! -f "$conf" ] || [ -f "new_mark" ]; then
         /opt/cif/bin/cif-tokens --storage-host ${es_host}:9200 \
                                 --username cif-${service} --new --read --write \
@@ -34,16 +41,16 @@ unbound -c /unbound.conf
 
 cat <<EOF >/supervisord.conf
 [program:router]
-command=/opt/cif/bin/cif-router --storage-host=${es_host}:9200 --logging --logfile=/var/log/cif/router.log
+command=/opt/cif/bin/cif-router --storage-host=${es_host}:9200 --logging --logfile=/var/cif/log/router.log
 
 [program:worker]
-command=/opt/cif/bin/cif-worker -C /var/cif/cif-worker.yml --logging --logfile=/var/log/cif/worker.log
+command=/opt/cif/bin/cif-worker -C /var/cif/conf/cif-worker.yml --logging --logfile=/var/cif/log/worker.log
 
 [program:smrt]
-command=/opt/cif/bin/cif-smrt -C /var/cif/cif-smrt.yml --logging --logfile=/var/log/cif/smrt.log
+command=/opt/cif/bin/cif-smrt -C /var/cif/conf/cif-smrt.yml --logging --logfile=/var/cif/log/smrt.log
 
 [supervisord]
-logfile = /var/log/cif/supervisord.log
+logfile = /var/cif/log/supervisord.log
 logfile_maxbytes = 50MB
 logfile_backups=7
 loglevel = info

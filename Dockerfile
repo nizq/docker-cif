@@ -34,7 +34,7 @@ RUN echo "===> Building..." \
     && cp /root/mos/elasticsearch/*.json / \
     && rm -rf /var/cache/apk/* /root/mos
 
-ENV CIF_HOME=/opt/cif PATH=$CIF_HOME/bin:$PATH PERL5LIB=/opt/cif/lib/perl5 DATA_DIR=/var/cif LOG_DIR=/var/log/cif CONF_DIR=/etc/cif
-VOLUME ["/etc/cif", "/var/cif", "/var/log/cif"]
+ENV CIF_HOME=/opt/cif PATH=$CIF_HOME/bin:$PATH PERL5LIB=/opt/cif/lib/perl5 DATA_DIR=/var/cif LOG_DIR=/var/cif/log CONF_DIR=/etc/cif
+VOLUME ["/var/cif"]
 COPY ["entrypoint.sh", "unbound.conf", "supervisord.conf", "/" ]
 CMD ["/entrypoint.sh"]
