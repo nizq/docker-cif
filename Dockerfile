@@ -6,7 +6,7 @@ RUN echo "===> Building..." \
     && sed -i "s/dl-4\.alpinelinux\.org/repos\.lax-noc\.com/g" /etc/apk/repositories \
     && apk add --update libffi libzmq perl perl openssl expat gettext libxml2 \
            make libffi-dev gcc libc-dev perl-dev jq wget \
-           curl openssl-dev autoconf automake libtool \
+           curl openssl-dev autoconf automake libtool bash \
            expat-dev libxml2-dev git unbound supervisor \
     && curl -L https://cpanmin.us | perl - App::cpanminus \
     && cpanm --notest Regexp::Common Moo@1.007000 Mouse@2.4.1 ZMQ::FFI@0.17 \
