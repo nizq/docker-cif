@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 es_host=${ES:-localhost}
 new_mark=/var/cif/.new_install
@@ -7,6 +7,19 @@ cd /var/cif
 for path in "log" "conf" "data"; do
     if [ ! -d "$path" ]; then
         (rm -f $path; mkdir $path)
+    fi
+done
+
+# http://www.catonmat.net/blog/tcp-port-scanner-in-bash/
+es_ready=0
+while [  "$es_ready" -eq 0 ]; do
+    echo >/dev/tcp/${es_host}/9200 &&
+        es_ready=1 || es_ready=0
+    if [ "$es_ready" -eq 1 ]; then
+        echo "elasticsearch is ready."
+    else
+        echo "elasticsearch not ready..."
+        sleep 2
     fi
 done
 
