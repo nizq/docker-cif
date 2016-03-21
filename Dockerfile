@@ -11,7 +11,7 @@ RUN echo "===> Building..." \
     && curl -L https://cpanmin.us | perl - App::cpanminus \
     && cpanm --notest Regexp::Common Moo@1.007000 Mouse@2.4.1 ZMQ::FFI@0.17 \
         Log::Log4perl@1.44 Test::Exception@0.32 MaxMind::DB::Reader@0.050005 \
-        GeoIP2@0.040005 Hijk@0.19 Crypt::Random::Source Compress::Snappy \
+        GeoIP2@0.040005 Hijk@0.19 Crypt::Random::Source Compress::Snappy Starman \
         Carp::Assert DateTime::Format::DateParse Daemon::Control XML::RSS \
         XML::LibXML File::Slurp HTML::TableExtract String::Tokenizer File::Type \
         Search::Elasticsearch@1.19 Net::Abuse::Utils Net::Abuse::Utils::Spamhaus Encoding::FixLatin \
