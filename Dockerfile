@@ -1,13 +1,15 @@
-FROM alpine:3.3
+FROM debian:jessie
 
 MAINTAINER nizq <ni.zhiqiang@gmail.com>
 
 RUN echo "===> Building..." \
-    && sed -i "s/dl-4\.alpinelinux\.org/repos\.lax-noc\.com/g" /etc/apk/repositories \
-    && apk add --update libffi libzmq perl perl openssl expat gettext libxml2 \
-           make libffi-dev gcc libc-dev perl-dev jq wget \
-           curl openssl-dev autoconf automake libtool bash \
-           expat-dev libxml2-dev git unbound supervisor \
+    && sed -i "s/httpredir/ftp.cn/g" /etc/apt/sources.list \
+    && apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y vim htop git git-core curl pkg-config rng-tools geoip-bin starman python-dev \
+       build-essential automake autoconf libmodule-build-perl libssl-dev libtool wget \
+       libffi6 libmoose-perl libmouse-perl libanyevent-perl liblwp-protocol-https-perl libxml2-dev \
+       libexpat1-dev libgeoip-dev libzmq3-dev gcc jq curl supervisor libperl-dev bind9 \
     && curl -L https://cpanmin.us | perl - App::cpanminus \
     && cpanm --notest Regexp::Common Moo@1.007000 Mouse@2.4.1 ZMQ::FFI@0.17 \
         Log::Log4perl@1.44 Test::Exception@0.32 MaxMind::DB::Reader@0.050005 \
@@ -27,14 +29,21 @@ RUN echo "===> Building..." \
     && cd /root/mos \
     && ./autogen.sh \
     && ./configure --enable-geoip --sysconfdir=/etc/cif --localstatedir=/var/cif --prefix=/opt/cif \
-    && ln -sf /usr/lib/libzmq.so.5 /usr/lib/libzmq.so \
+    && ln -sf /usr/lib/x86_64-linux-gnu/libzmq.so.3 /usr/lib/x86_64-linux-gnu/libzmq.so \
     && mkdir -p /var/cif/cache \
     && make && make install \
-    && apk del openssl-dev libc-dev perl-dev expat-dev libxml2-dev autoconf automake libtool git \
+    && apt-get remove -y build-essential automake autoconf libssl-dev libtool libxml2-dev \
+       libexpat1-dev libgeoip-dev libzmq3-dev gcc libperl-dev \
     && cp /root/mos/elasticsearch/*.json / \
-    && rm -rf /var/cache/apk/* /root/mos
+    && rm -rf /root/mos
 
-ENV CIF_HOME=/opt/cif PATH=$CIF_HOME/bin:$PATH PERL5LIB=/opt/cif/lib/perl5 DATA_DIR=/var/cif LOG_DIR=/var/cif/log CONF_DIR=/etc/cif
+COPY ["named.conf.options", "named.conf.local", "/"]
+RUN cp /etc/bind/named.conf.options /etc/bind/named.conf.options.orig \
+    && cp /named.conf.options /etc/bind/named.conf.options \
+    && cat /named.conf.local >> /etc/bind/named.conf.local \
+    && echo "nameserver 127.0.0.1" > /etc/resolv.conf \
+    && rm /named.conf.options /named.conf.local
+
 VOLUME ["/var/cif"]
-COPY ["entrypoint.sh", "unbound.conf", "supervisord.conf", "/" ]
+COPY ["entrypoint.sh", "/" ]
 CMD ["/entrypoint.sh"]
