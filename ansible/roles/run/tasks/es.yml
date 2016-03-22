@@ -21,6 +21,6 @@
     -p 9200:9200 -p 9300:9300 \
     --ulimit nofile=128000:128000 \
     -v /etc/localtime:/etc/localtime \
-    -v {{ es['conf'] }}:/usr/share/elasticsearch/config \
+    -v {{ es['conf'] }}:/etc/elasticsearch \
     -v {{ es['data'] }}:/usr/share/elasticsearch/data \
     elasticsearch:1.7
