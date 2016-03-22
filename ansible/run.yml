@@ -1,0 +1,8 @@
+---
+- name: run
+  hosts: localhost
+  connection: local
+  roles:
+    - run
+  vars:
+    user: nizq

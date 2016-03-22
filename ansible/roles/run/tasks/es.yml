@@ -1,0 +1,26 @@
+---
+- name: data dirs
+  file: path={{ item }} state=directory mode=0755
+  with_items:
+    - "{{ es['conf'] }}"
+    - "{{ es['data'] }}"
+
+- name: create es conf
+  template: src=es/elasticsearch.yml.j2 dest={{ es['conf'] }}/elasticsearch.yml
+
+- name: logging conf
+  template: src=es/logging.yml.j2 dest={{ es['conf'] }}/logging.yml
+
+- name: rm es
+  command: docker rm -f {{ es['name'] }}
+  ignore_errors: true
+
+- name: run es
+  command: |
+    weave run --name {{ es['name'] }} \
+    -p 9200:9200 -p 9300:9300 \
+    --ulimit nofile=128000:128000 \
+    -v /etc/localtime:/etc/localtime \
+    -v {{ es['conf'] }}:/usr/share/elasticsearch/config \
+    -v {{ es['data'] }}:/usr/share/elasticsearch/data \
+    elasticsearch:1.7

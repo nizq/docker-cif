@@ -1,0 +1,8 @@
+index.number_of_shards: 1
+index.number_of_replicas: 0
+
+cluster.name: {{ es['cluster'] }}
+index.fielddata.cache: node
+indices.fielddata.cache.size: 40%
+gateway.type: local
+zen.ping.multicast: false
