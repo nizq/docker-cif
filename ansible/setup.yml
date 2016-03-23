@@ -1,8 +1,9 @@
 ---
-- name: run
+- name: setup
   hosts: localhost
   connection: local
   roles:
-    - run
+    - cifv2
   vars:
     user: nizq
+    cmd: setup

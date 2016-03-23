@@ -1,2 +1,26 @@
 # docker-cifv2
-Docker image of [CIFv2](https://github.com/csirtgadgets/massive-octo-spice) base alpine:3.3
+
+## build
+
+`$ docker build -t nizq/cifv2:debian .`
+
+## setup
+
+```
+$ cd ansible
+$ ansible-playbook setup.yml
+```
+
+## stop
+
+```
+$ cd ansible
+$ ansible-playbook stop.yml
+```
+
+## start
+
+```
+$ cd ansible
+$ ansible-playbook start.yml
+```

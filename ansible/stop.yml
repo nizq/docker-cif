@@ -1,0 +1,9 @@
+---
+- name: stop
+  hosts: localhost
+  connection: local
+  roles:
+    - cifv2
+  vars:
+    user: nizq
+    cmd: stop

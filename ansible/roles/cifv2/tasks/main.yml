@@ -1,0 +1,9 @@
+---
+- include: setup.yml
+  when: cmd=='setup'
+
+- include: start.yml
+  when: cmd=='start'
+
+- include: stop.yml
+  when: cmd=='stop'

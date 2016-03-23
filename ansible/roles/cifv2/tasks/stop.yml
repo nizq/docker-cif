@@ -1,0 +1,12 @@
+---
+- name: stop cifv2
+  command: docker stop cifv2
+  ignore_errors: true
+
+- name: stop es
+  command: docker stop {{ es['name'] }}
+  ignore_errors: true
+  
+- name: stop weave
+  command: weave stop
+  ignore_errors: true

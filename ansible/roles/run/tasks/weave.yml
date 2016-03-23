@@ -1,4 +1,0 @@
----
-- name: startup weave
-  command: weave launch
-  ignore_errors: true

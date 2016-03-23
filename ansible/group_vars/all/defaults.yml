@@ -1,3 +1,18 @@
 ---
-home: "/home/{{ user }}/ti"
-data: "{{ home }}"
+data: "/home/{{ user }}/ti"
+
+cif_home: "{{ data }}/cif"
+
+es_home: "{{ data }}/es"
+es:
+  conf: "{{ es_home }}/conf"
+  data: "{{ es_home }}/data"
+  name: "{{ es_name|default('es17') }}"
+  cluster: "{{ cluster_name|default('defstack') }}"
+
+bro_home: "{{ data }}/bro"
+bro:
+  conf: "{{ bro_home }}/conf"
+  data: "{{ bro_home }}/data"
+  num: "{{ bro_num|default(2) }}"
+  intf: "{{ iface|default('eth0') }}"

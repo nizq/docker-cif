@@ -1,0 +1,10 @@
+---
+- name: startup weave
+  command: weave launch
+  ignore_errors: true
+
+- name: start es
+  command: weave start {{ es['name'] }}
+
+- name: start cifv2
+  command: weave start cifv2
