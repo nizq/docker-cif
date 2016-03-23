@@ -32,6 +32,7 @@ while [  "$es_ready" -eq 0 ]; do
     fi
 done
 
+cd /
 url="http://${es_host}:9200/_template/cif_observables/"
 num=$(curl -XGET ${url} 2>/dev/null|jq '.cif_observables|length')
 if [ "$num" -eq 0 ]; then
