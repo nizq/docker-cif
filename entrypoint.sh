@@ -13,7 +13,7 @@ new_mark=/var/cif/.new_install
 /etc/init.d/bind9 start
 
 cd /var/cif
-for path in "log" "conf" "data"; do
+for path in "log" "conf"; do
     if [ ! -d "$path" ]; then
         (rm -f $path; mkdir $path)
     fi
