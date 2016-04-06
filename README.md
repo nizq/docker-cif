@@ -1,5 +1,7 @@
 # docker-cifv2
 
+`$ docker pull elasticsearch:1.7`
+
 ## build
 
 `$ docker build -t nizq/cifv2:debian .`
